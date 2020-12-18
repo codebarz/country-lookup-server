@@ -27,11 +27,16 @@ export const getCountry = async (
     ]);
 
     const payload = countryData.map((country) => {
-      const countryCurrencyToSEK = convertCurrencyToSEK(
-        country.currencies[0]?.code!,
-        'SEK',
-        currencyRates.rates,
-      );
+      let countryCurrencyToSEK: unknown;
+      if (country.currencies[0]?.code! === 'EUR') {
+        countryCurrencyToSEK = currencyRates.rates['SEK'];
+      } else {
+        countryCurrencyToSEK = convertCurrencyToSEK(
+          country.currencies[0]?.code!,
+          'SEK',
+          currencyRates.rates,
+        );
+      }
 
       let result = { ...country, currencyToSEK: countryCurrencyToSEK };
 

@@ -17,7 +17,7 @@ const convertCurrencyToSEK: currencyConverterType = (
   rates,
 ) => {
   const currencyToSEK =
-    rates[countryCurrencySymbol]! / rates[finalConversionSymbol]!;
+    rates[finalConversionSymbol]! / rates[countryCurrencySymbol]!;
   return currencyToSEK;
 };
 

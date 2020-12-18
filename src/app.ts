@@ -48,7 +48,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', apiRouter);
-app.use('/api/v1/authorize', authRouter);
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/country', countryRouter);
 app.use(errors());
 

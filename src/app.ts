@@ -5,8 +5,9 @@ import compression from 'compression';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
-
+import { errors } from 'celebrate';
 import apiRouter from './routes/sample';
+import authRouter from './routes/auth';
 
 const app = express();
 
@@ -46,6 +47,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', apiRouter);
+app.use('/api/v1/authorize', authRouter);
+app.use(errors());
 
 const clientPath = path.join(__dirname, '../', 'client/build');
 

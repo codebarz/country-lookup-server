@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest --detectOpenHandles --forceExit --collectCoverage"
+    "test": "jest --detectOpenHandles --forceExit --collectCoverage",
+    "build": "yarn tsc"
   },
   "dependencies": {
     "@types/compression": "^1.7.0",

@@ -8,5 +8,6 @@ declare namespace NodeJS {
     FIXER_API: string;
     FIXER_ACCESS_KEY: string;
     REQUEST_RATE_LIMIT: number;
+    REQUEST_RATE_LIMIT_TIME: number;
   }
 }

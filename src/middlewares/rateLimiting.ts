@@ -8,6 +8,7 @@ type RateType = { timeStamp: number; count: number };
 type RedisStoreData = Array<RateType>;
 
 const RateLimit = process.env.REQUEST_RATE_LIMIT;
+const RateLimitTime = process.env.REQUEST_RATE_LIMIT_TIME;
 
 export default async (req: RequestData, res: Response, next: NextFunction) => {
   try {
@@ -36,7 +37,9 @@ export default async (req: RequestData, res: Response, next: NextFunction) => {
       } else {
         //Calculate request made within the last window
         let existingData = JSON.parse(data!) as RedisStoreData;
-        let requestTimeWindow = moment().subtract(RateLimit, 'minutes').unix();
+        let requestTimeWindow = moment()
+          .subtract(RateLimitTime, 'minutes')
+          .unix();
 
         let requestWithinWindow = existingData.filter(
           (request) => request.timeStamp > requestTimeWindow,
@@ -49,14 +52,14 @@ export default async (req: RequestData, res: Response, next: NextFunction) => {
           0,
         );
 
-        if (totalRequesWithinWindow > 5) {
+        if (totalRequesWithinWindow > RateLimit) {
           return res.status(httpStatus.TOO_MANY_REQUESTS).json({
             error: 'You have exceeded the 5 request per minute limit',
           });
         } else {
           let lastRequestLog = existingData[existingData.length - 1];
           let currentWindowStartTimeStamp = requestTime
-            .subtract(RateLimit, 'minutes')
+            .subtract(RateLimitTime, 'minutes')
             .unix();
 
           //Check if last request has not passed limit and increment counter

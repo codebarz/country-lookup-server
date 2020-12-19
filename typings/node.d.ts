@@ -7,5 +7,6 @@ declare namespace NodeJS {
     COUNTRY_API: string;
     FIXER_API: string;
     FIXER_ACCESS_KEY: string;
+    REQUEST_RATE_LIMIT: number;
   }
 }

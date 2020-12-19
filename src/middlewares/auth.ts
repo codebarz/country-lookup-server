@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import { verify } from '../helpers/authToken';
 
-interface RequestData extends Request {
+export interface RequestData extends Request {
   token?: any;
+  redisKey?: string;
 }
 
 type tokenData = { email: string };
@@ -22,6 +23,7 @@ export default async (req: RequestData, res: Response, next: NextFunction) => {
       const token = (await verify(tokenToVerify)) as tokenData;
 
       req.token = token;
+      req.redisKey = tokenToVerify;
       return next();
     } catch (error) {
       return res

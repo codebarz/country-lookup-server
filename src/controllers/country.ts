@@ -55,14 +55,15 @@ export const convertCurrency = async (
   next: NextFunction,
 ): Promise<ResponseInterface | void> => {
   try {
-    const { code, amount } = req.body as ConvertCurrencyType;
+    const { code, amount, convertToCode } = req.body as ConvertCurrencyType;
 
     const currencyRatesRequest = await getCurrencyRequest(
       `${process.env.FIXER_API}/latest?access_key=${process.env.FIXER_ACCESS_KEY}`,
     );
 
     const currency =
-      convertCurrencyToSEK(code, 'SEK', currencyRatesRequest.rates) * amount;
+      convertCurrencyToSEK(code, convertToCode, currencyRatesRequest.rates) *
+      amount;
 
     return res.status(httpStatus.OK).json({ conversion: currency });
   } catch (error) {

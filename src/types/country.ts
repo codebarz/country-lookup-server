@@ -14,4 +14,8 @@ export type CurrenciesResponseType = {
   rates: { [index: string]: number };
 };
 
-export type ConvertCurrencyType = { code: string; amount: number };
+export type ConvertCurrencyType = {
+  code: string;
+  amount: number;
+  convertToCode: string;
+};

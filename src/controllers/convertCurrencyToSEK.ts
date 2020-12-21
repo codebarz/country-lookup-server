@@ -17,7 +17,9 @@ const convertCurrencyToSEK: currencyConverterType = (
   rates,
 ) => {
   const currencyToSEK =
-    rates[finalConversionSymbol]! / rates[countryCurrencySymbol]!;
+    countryCurrencySymbol !== 'IMP[G]'
+      ? rates[finalConversionSymbol]! / rates[countryCurrencySymbol]!
+      : rates[finalConversionSymbol]! / rates['IMP']!;
   return currencyToSEK;
 };
 

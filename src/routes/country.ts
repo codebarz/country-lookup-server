@@ -5,6 +5,6 @@ import limitRequestRate from '../middlewares/rateLimiting';
 
 const router = Router();
 
-router.route('/:country').post(checkToken, limitRequestRate, getCountry);
+router.route('/:country').get(checkToken, limitRequestRate, getCountry);
 
 export default router;

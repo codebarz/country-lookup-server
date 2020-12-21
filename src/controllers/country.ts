@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
-import { CountryType } from '../types/country';
+import { CountryType, ConvertCurrencyType } from '../types/country';
 import { ResponseInterface } from '../types/response';
 import { getCountryRequest, getCurrencyRequest } from '../helpers/request';
 import convertCurrencyToSEK from './convertCurrencyToSEK';
@@ -44,6 +44,28 @@ export const getCountry = async (
     });
 
     return res.status(httpStatus.OK).json({ payload });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const convertCurrency = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<ResponseInterface | void> => {
+  try {
+    const { code, amount, convertToCode } = req.body as ConvertCurrencyType;
+
+    const currencyRatesRequest = await getCurrencyRequest(
+      `${process.env.FIXER_API}/latest?access_key=${process.env.FIXER_ACCESS_KEY}`,
+    );
+
+    const currency =
+      convertCurrencyToSEK(code, convertToCode, currencyRatesRequest.rates) *
+      amount;
+
+    return res.status(httpStatus.OK).json({ conversion: currency });
   } catch (error) {
     next(error);
   }

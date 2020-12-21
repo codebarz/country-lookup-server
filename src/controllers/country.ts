@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import { CountryType, ConvertCurrencyType } from '../types/country';
 import { ResponseInterface } from '../types/response';
-import { getCountryRequest, getCurrencyRequest } from '../helpers/request';
+import getCountryRequest from '../helpers/getCountryRequest';
+import getCurrencyRequest from '../helpers/getCurrencyRequest';
 import convertCurrencyToSEK from './convertCurrencyToSEK';
 
 export const getCountry = async (

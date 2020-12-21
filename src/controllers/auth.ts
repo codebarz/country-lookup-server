@@ -20,6 +20,7 @@ export const generateUserToken = async (
 
     return res.status(httpStatus.OK).json({ token });
   } catch (error) {
+    console.log(error.message);
     next(error);
   }
 };

@@ -13,3 +13,9 @@ export type CurrenciesResponseType = {
   date: string;
   rates: { [index: string]: number };
 };
+
+export type ConvertCurrencyType = {
+  code: string;
+  amount: number;
+  convertToCode: string;
+};

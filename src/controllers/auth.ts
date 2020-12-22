@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthType } from '../types/auth';
 import { sign } from 'jsonwebtoken';
@@ -7,7 +7,6 @@ import { ResponseInterface } from '../types/response';
 export const generateUserToken = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<ResponseInterface | void> => {
   try {
     const data = req.body;
@@ -20,7 +19,8 @@ export const generateUserToken = async (
 
     return res.status(httpStatus.OK).json({ token });
   } catch (error) {
-    console.log(error.message);
-    next(error);
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Unable to login at this time', error: error.message });
   }
 };

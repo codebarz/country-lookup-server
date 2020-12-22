@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { CountryType, ConvertCurrencyType } from '../types/country';
 import { ResponseInterface } from '../types/response';
@@ -9,7 +9,6 @@ import convertCurrencyToSEK from '../helpers/convertCurrencyToSEK';
 export const getCountry = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<ResponseInterface | void> => {
   try {
     const { country } = req.params as CountryType;
@@ -46,14 +45,16 @@ export const getCountry = async (
 
     return res.status(httpStatus.OK).json({ payload });
   } catch (error) {
-    next(error);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: 'Cannot get country details at this time',
+      error: error.message,
+    });
   }
 };
 
 export const convertCurrency = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<ResponseInterface | void> => {
   try {
     const { code, amount, convertToCode } = req.body as ConvertCurrencyType;
@@ -68,6 +69,9 @@ export const convertCurrency = async (
 
     return res.status(httpStatus.OK).json({ conversion: currency });
   } catch (error) {
-    next(error);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: 'Cannot convert currency at this time',
+      error: error.message,
+    });
   }
 };

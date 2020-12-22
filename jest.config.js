@@ -3,9 +3,11 @@ module.exports = {
   testEnvironment: 'node',
 };
 
+//Set up Jest Envars
 process.env = Object.assign(process.env, {
   ACCESS_TOKEN_SECRET: 'secret',
-  FIXER_API: 'http://data.fixer.io/api',
-  FIXER_ACCESS_KEY: 'd35f65e18c278647013d57ede996efab',
-  COUNTRY_API: 'https://restcountries.eu/rest/v2',
+  REDIS_URL: 'redis://localhost',
+  REQUEST_RATE_LIMIT: 5,
+  REQUEST_RATE_LIMIT_TIME: 1,
+  BCRYPT_SALT_ROUNDS: 12,
 });

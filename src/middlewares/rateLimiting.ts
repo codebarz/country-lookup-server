@@ -54,7 +54,7 @@ export default async (req: RequestData, res: Response, next: NextFunction) => {
 
         if (totalRequesWithinWindow > RateLimit) {
           return res.status(httpStatus.TOO_MANY_REQUESTS).json({
-            error: 'You have exceeded the 5 request per minute limit',
+            message: 'You have exceeded the 5 request per minute limit',
           });
         } else {
           let lastRequestLog = existingData[existingData.length - 1];

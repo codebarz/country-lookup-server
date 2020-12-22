@@ -4,7 +4,7 @@ import { CountryType, ConvertCurrencyType } from '../types/country';
 import { ResponseInterface } from '../types/response';
 import getCountryRequest from '../helpers/getCountryRequest';
 import getCurrencyRequest from '../helpers/getCurrencyRequest';
-import convertCurrencyToSEK from './convertCurrencyToSEK';
+import convertCurrencyToSEK from '../helpers/convertCurrencyToSEK';
 
 export const getCountry = async (
   req: Request,

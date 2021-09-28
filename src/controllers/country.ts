@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { CountryType, ConvertCurrencyType } from '../types/country';
 import { ResponseInterface } from '../types/response';
-import getCountryRequest from '../helpers/getCountryRequest';
 import getCurrencyRequest from '../helpers/getCurrencyRequest';
 import convertCurrencyToSEK from '../helpers/convertCurrencyToSEK';
+import { getCountries } from 'countrycitystatejson';
 
 export const getCountry = async (
   req: Request,
@@ -12,29 +12,28 @@ export const getCountry = async (
 ): Promise<ResponseInterface | void> => {
   try {
     const { country } = req.params as CountryType;
+    const pattern = new RegExp(country, 'gi');
+    const countriesList = getCountries();
 
-    const countryDataRequest = getCountryRequest(
-      `${process.env.COUNTRY_API}/name/${country}?fields=name;currencies;population`,
+    const matchedCountries = countriesList.filter((country) =>
+      pattern.test(country.name),
     );
 
     const currencyRatesRequest = getCurrencyRequest(
       `${process.env.FIXER_API}/latest?access_key=${process.env.FIXER_ACCESS_KEY}`,
     );
 
-    const [countryData, currencyRates] = await Promise.all([
-      countryDataRequest,
-      currencyRatesRequest,
-    ]);
+    const [currencyRates] = await Promise.all([currencyRatesRequest]);
 
-    const payload = countryData.map((country) => {
+    const payload = matchedCountries.map((country) => {
       let countryCurrencyToSEK: unknown;
-      if (country.currencies[0]?.code! === 'EUR') {
-        countryCurrencyToSEK = currencyRates.rates['SEK'];
+      if (country.currency! === 'EUR') {
+        countryCurrencyToSEK = currencyRates!.rates['SEK'];
       } else {
         countryCurrencyToSEK = convertCurrencyToSEK(
-          country.currencies[0]?.code!,
+          country.currency!,
           'SEK',
-          currencyRates.rates,
+          currencyRates!.rates,
         );
       }
 
@@ -44,7 +43,7 @@ export const getCountry = async (
     });
 
     return res.status(httpStatus.OK).json({ payload });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: 'Cannot get country details at this time',
       error: error.message,
@@ -68,7 +67,7 @@ export const convertCurrency = async (
       amount;
 
     return res.status(httpStatus.OK).json({ conversion: currency });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: 'Cannot convert currency at this time',
       error: error.message,
